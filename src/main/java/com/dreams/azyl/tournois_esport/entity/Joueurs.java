@@ -17,10 +17,7 @@ public class Joueurs {
     private Utilisateurs user;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "player_stats_map",
-            joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "stat_id"))
-    @MapKey(name = "game")
+    @MapKeyJoinColumn(name = "game_id")
     private Map<Jeux, StatistiqueJoueur> statistics;
 
     public Joueurs() {
