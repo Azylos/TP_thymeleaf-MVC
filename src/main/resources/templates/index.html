@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GG Tournaments - Plateforme de Gestion de Tournois E-Sport</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #4b0082;
+            --accent-color: #ff6b6b;
+            --bg-dark: #0f1923;
+            --bg-light: #1a2a35;
+            --text-light: #f0f0f0;
+            --text-gray: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: rgba(15, 25, 35, 0.95);
+            backdrop-filter: blur(5px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-login:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+        }
+
+        .btn-register {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .btn-register:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 25, 35, 0.9), rgba(75, 0, 130, 0.8));
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1280/720');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4);
+            z-index: -2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-title span {
+            color: var(--primary-color);
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 15px 30px;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--text-light);
+            padding: 15px 30px;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--bg-light);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+        }
+
+        .section-description {
+            text-align: center;
+            color: var(--text-gray);
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--bg-dark);
+            padding: 30px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            color: var(--text-gray);
+        }
+
+        /* Upcoming Tournaments */
+        .tournaments {
+            padding: 100px 0;
+        }
+
+        .tournaments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .tournament-card {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tournament-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .tournament-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .tournament-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(15, 25, 35, 1) 0%, rgba(15, 25, 35, 0) 100%);
+        }
+
+        .tournament-game {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tournament-content {
+            padding: 20px;
+        }
+
+        .tournament-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .tournament-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .tournament-date, .tournament-prize {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        .tournament-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-tag {
+            background-color: rgba(138, 43, 226, 0.2);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tournament-participants {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background-color: var(--bg-light);
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-description {
+            color: var(--text-gray);
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                margin-top: 20px;
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .auth-buttons {
+                margin-top: 20px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav>
+    <div class="container navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-gamepad"></i>
+            <span>GG</span> Tournaments
+        </a>
+        <div class="nav-links">
+            <a href="#home">Accueil</a>
+            <a href="#features">Fonctionnalités</a>
+            <a href="#tournaments">Tournois</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="auth-buttons">
+            <button class="btn btn-login">Connexion</button>
+            <button class="btn btn-register">Inscription</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="container hero-content">
+        <h1 class="hero-title">Organisez et participez à des <span>tournois e-sport</span> comme un pro</h1>
+        <p class="hero-description">Une plateforme complète pour créer, gérer et participer à des tournois e-sport. Suivez les compétitions en temps réel, rejoignez une communauté passionnée et montez dans les classements.</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary">Créer un tournoi</button>
+            <button class="btn btn-secondary">Découvrir les tournois</button>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <div class="container">
+        <h2 class="section-title">Fonctionnalités</h2>
+        <p class="section-description">Tout ce dont vous avez besoin pour organiser et participer à des tournois e-sport de classe mondiale.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-trophy feature-icon"></i>
+                <h3 class="feature-title">Gestion de tournois</h3>
+                <p class="feature-description">Créez facilement des tournois avec différents formats (élimination directe, round-robin, suisse) et personnalisez tous les aspects.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-users feature-icon"></i>
+                <h3 class="feature-title">Équipes et joueurs</h3>
+                <p class="feature-description">Gérez les équipes, les joueurs et les inscriptions. Communication intégrée pour coordonner les matchs.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h3 class="feature-title">Statistiques en temps réel</h3>
+                <p class="feature-description">Suivez les performances, les classements et les statistiques des joueurs et des équipes en temps réel.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-broadcast-tower feature-icon"></i>
+                <h3 class="feature-title">Streaming et diffusion</h3>
+                <p class="feature-description">Intégration avec les plateformes de streaming populaires pour diffuser vos tournois en direct.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-award feature-icon"></i>
+                <h3 class="feature-title">Prix et récompenses</h3>
+                <p class="feature-description">Gérez les prix, les récompenses et les parrainages pour vos tournois.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt feature-icon"></i>
+                <h3 class="feature-title">Application mobile</h3>
+                <p class="feature-description">Accédez à toutes les fonctionnalités depuis votre smartphone avec notre application mobile dédiée.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Tournaments -->
+<section id="tournaments" class="tournaments">
+    <div class="container">
+        <h2 class="section-title">Tournois à venir</h2>
+        <p class="section-description">Rejoignez les prochains tournois et montrez vos compétences à la communauté.</p>
+
+        <div class="tournaments-grid">
+            <div class="tournament-card">
+                <div class="tournament-image" style="background-image: url('/api/placeholder/400/200')">
+                    <span class="tournament-game">League of Legends</span>
+                </div>
+                <div class="tournament-content">
+                    <h3 class="tournament-title">Championnat National E-League</h3>
+                    <div class="tournament-details">
+                            <span class="tournament-date">
+                                <i class="fas fa-calendar"></i> 28 Mai 2025
+                            </span>
+                        <span class="tournament-prize">
+                                <i class="fas fa-coins"></i> 5000€
+                            </span>
+                    </div>
+                    <div class="tournament-status">
+                        <span class="status-tag">Inscriptions ouvertes</span>
+                        <span class="tournament-participants">
+                                <i class="fas fa-user-friends"></i> 24/32
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tournament-card">
+                <div class="tournament-image" style="background-image: url('/api/placeholder/400/200')">
+                    <span class="tournament-game">CS2</span>
+                </div>
+                <div class="tournament-content">
+                    <h3 class="tournament-title">CS Masters Series</h3>
+                    <div class="tournament-details">
+                            <span class="tournament-date">
+                                <i class="fas fa-calendar"></i> 15 Juin 2025
+                            </span>
+                        <span class="tournament-prize">
+                                <i class="fas fa-coins"></i> 7500€
+                            </span>
+                    </div>
+                    <div class="tournament-status">
+                        <span class="status-tag">Inscriptions ouvertes</span>
+                        <span class="tournament-participants">
+                                <i class="fas fa-user-friends"></i> 12/16
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tournament-card">
+                <div class="tournament-image" style="background-image: url('/api/placeholder/400/200')">
+                    <span class="tournament-game">Valorant</span>
+                </div>
+                <div class="tournament-content">
+                    <h3 class="tournament-title">Valorant Pro Challenge</h3>
+                    <div class="tournament-details">
+                            <span class="tournament-date">
+                                <i class="fas fa-calendar"></i> 10 Juin 2025
+                            </span>
+                        <span class="tournament-prize">
+                                <i class="fas fa-coins"></i> 3000€
+                            </span>
+                    </div>
+                    <div class="tournament-status">
+                        <span class="status-tag">Inscriptions ouvertes</span>
+                        <span class="tournament-participants">
+                                <i class="fas fa-user-friends"></i> 8/16
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <h2 class="cta-title">Prêt à rejoindre la compétition?</h2>
+        <p class="cta-description">Inscrivez-vous maintenant pour commencer à organiser et participer à des tournois e-sport. C'est gratuit!</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary">S'inscrire gratuitement</button>
+            <button class="btn btn-secondary">En savoir plus</button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>GG Tournaments</h4>
+                <ul class="footer-links">
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Équipe</a></li>
+                    <li><a href="#">Carrières</a></li>
+                    <li><a href="#">Devenez partenaire</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Ressources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Guide du débutant</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Centre d'aide</a></li>
+                    <li><a href="#">Contacter le support</a></li>
+                    <li><a href="#">Signaler un bug</a></li>
+                    <li><a href="#">Statut du système</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Suivez-nous</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitch"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2025 GG Tournaments. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    // Navigation scroll effect
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > 50) {
+            $('nav').css('background-color', 'rgba(15, 25, 35, 0.98)');
+        } else {
+            $('nav').css('background-color', 'rgba(15, 25, 35, 0.95)');
+        }
+    });
+
+    // Smooth scrolling for anchor links
+    $('a[href*="#"]').on('click', function(e) {
+        e.preventDefault();
+
+        $('html, body').animate(
+            {
+                scrollTop: $($(this).attr('href')).offset().top - 80
+            },
+            500,
+            'linear'
+        );
+    });
+</script>
+</body>
+</html>
