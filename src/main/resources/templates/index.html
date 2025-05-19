@@ -593,7 +593,41 @@
         <p class="section-description">Rejoignez les prochains tournois et montrez vos compétences à la communauté.</p>
 
         <div class="tournaments-grid">
-            <div class="tournament-card">
+            <!-- Utilisation de Thymeleaf pour afficher dynamiquement les tournois -->
+            <div class="tournament-card" th:each="tournoi : ${tournois}" th:if="${tournoi.status.name() == 'OPEN' || tournoi.status.name() == 'REGISTRATION'}">
+                <div class="tournament-image" th:style="${tournoi.game.imageUrl != null} ? 'background-image: url(' + ${tournoi.game.imageUrl} + ')' : 'background-image: url(\'/api/placeholder/400/200\')'">
+                    <span class="tournament-game" th:text="${tournoi.game.name}">Nom du jeu</span>
+                </div>
+                <div class="tournament-content">
+                    <h3 class="tournament-title" th:text="${tournoi.name}">Nom du tournoi</h3>
+                    <div class="tournament-details">
+                            <span class="tournament-date">
+                                <i class="fas fa-calendar"></i>
+                                <span th:text="${#temporals.format(tournoi.startDate, 'dd MMMM yyyy')}">Date de début</span>
+                            </span>
+                        <span class="tournament-mode" th:if="${tournoi.gameMode != null}">
+                                <i class="fas fa-gamepad"></i>
+                                <span th:text="${tournoi.gameMode.name}">Mode de jeu</span>
+                            </span>
+                    </div>
+                    <div class="tournament-description" th:if="${tournoi.description != null && !#strings.isEmpty(tournoi.description)}">
+                        <p th:text="${#strings.abbreviate(tournoi.description, 100)}">Description du tournoi</p>
+                    </div>
+                    <div class="tournament-status">
+                        <span class="status-tag" th:text="${tournoi.status.name() == 'REGISTRATION' ? 'Inscriptions ouvertes' : (tournoi.status.name() == 'OPEN' ? 'Ouvert' : tournoi.status.name())}">Statut</span>
+                        <span class="tournament-participants">
+                                <i class="fas fa-user-friends"></i>
+                                <span th:text="${tournoi.matches != null ? tournoi.matches.size() : '0'} + '/' + ${tournoi.maxParticipants}">Participants</span>
+                            </span>
+                    </div>
+                    <div class="tournament-actions" style="margin-top: 15px;">
+                        <a th:href="@{'/tournois/' + ${tournoi.id}}" class="btn btn-primary" style="width: 100%; text-align: center; text-decoration: none;">Voir détails</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournoi statique affiché seulement si aucun tournoi n'est disponible -->
+            <div class="tournament-card" th:if="${tournois == null || tournois.isEmpty()}">
                 <div class="tournament-image" style="background-image: url('/api/placeholder/400/200')">
                     <span class="tournament-game">League of Legends</span>
                 </div>
@@ -603,8 +637,8 @@
                             <span class="tournament-date">
                                 <i class="fas fa-calendar"></i> 28 Mai 2025
                             </span>
-                        <span class="tournament-prize">
-                                <i class="fas fa-coins"></i> 5000€
+                        <span class="tournament-mode">
+                                <i class="fas fa-gamepad"></i> 5v5
                             </span>
                     </div>
                     <div class="tournament-status">
@@ -613,51 +647,8 @@
                                 <i class="fas fa-user-friends"></i> 24/32
                             </span>
                     </div>
-                </div>
-            </div>
-
-            <div class="tournament-card">
-                <div class="tournament-image" style="background-image: url('/api/placeholder/400/200')">
-                    <span class="tournament-game">CS2</span>
-                </div>
-                <div class="tournament-content">
-                    <h3 class="tournament-title">CS Masters Series</h3>
-                    <div class="tournament-details">
-                            <span class="tournament-date">
-                                <i class="fas fa-calendar"></i> 15 Juin 2025
-                            </span>
-                        <span class="tournament-prize">
-                                <i class="fas fa-coins"></i> 7500€
-                            </span>
-                    </div>
-                    <div class="tournament-status">
-                        <span class="status-tag">Inscriptions ouvertes</span>
-                        <span class="tournament-participants">
-                                <i class="fas fa-user-friends"></i> 12/16
-                            </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tournament-card">
-                <div class="tournament-image" style="background-image: url('/api/placeholder/400/200')">
-                    <span class="tournament-game">Valorant</span>
-                </div>
-                <div class="tournament-content">
-                    <h3 class="tournament-title">Valorant Pro Challenge</h3>
-                    <div class="tournament-details">
-                            <span class="tournament-date">
-                                <i class="fas fa-calendar"></i> 10 Juin 2025
-                            </span>
-                        <span class="tournament-prize">
-                                <i class="fas fa-coins"></i> 3000€
-                            </span>
-                    </div>
-                    <div class="tournament-status">
-                        <span class="status-tag">Inscriptions ouvertes</span>
-                        <span class="tournament-participants">
-                                <i class="fas fa-user-friends"></i> 8/16
-                            </span>
+                    <div class="tournament-actions" style="margin-top: 15px;">
+                        <a href="#" class="btn btn-primary" style="width: 100%; text-align: center; text-decoration: none;">Voir détails</a>
                     </div>
                 </div>
             </div>
