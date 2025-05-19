@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tournament_type")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Tournois {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
