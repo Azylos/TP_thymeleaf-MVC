@@ -1,8 +1,10 @@
 package com.dreams.azyl.tournois_esport.entity;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
+@DiscriminatorValue("ROUNDROBIN")
 public class RoundRobinTournament extends Tournois {
     private Integer numberOfRounds;
     private Boolean homeAndAway;

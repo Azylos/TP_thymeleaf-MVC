@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des tournois</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .create-btn {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .tournaments-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tournament-item {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .tournament-item.SINGLE_ELIMINATION {
+            border-left: 5px solid #3498db;
+        }
+
+        .tournament-item.DOUBLE_ELIMINATION {
+            border-left: 5px solid #e74c3c;
+        }
+
+        .tournament-item.ROUND_ROBIN {
+            border-left: 5px solid #f1c40f;
+        }
+
+        .tournament-name {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .tournament-info {
+            color: #7f8c8d;
+            margin: 5px 0;
+            display: inline-block;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Liste des tournois</h1>
+<a href="/tournois/creation-tournois" class="create-btn">Créer un nouveau tournoi</a>
+<ul class="tournaments-list">
+    <li th:each="tournoi : ${tournois}" th:class="'tournament-item '">
+        <a th:href="@{/tournois/{id}(id=${tournoi.id})}" th:text="${tournoi.name}" class="tournament-name">Nom du
+            tournoi</a>
+<!--        <span class="tournament-info" th:text="'Format: ' + ${tournoi.format}"></span>-->
+        <span class="tournament-info" th:text="'Participants max: ' + ${tournoi.maxParticipants}"></span>
+        <span class="tournament-info" th:text="'Status: ' + ${tournoi.status}"></span>
+        <a th:href="@{/tournois/{id}/edit(id=${tournoi.id})}" class="action-btn edit-btn">Modifier</a>
+        <form th:action="@{/tournois/{id}/delete(id=${tournoi.id})}" method="post" style="display:inline">
+            <button type="submit" class="action-btn delete-btn">Supprimer</button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

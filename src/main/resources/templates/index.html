@@ -517,9 +517,9 @@
         </a>
         <div class="nav-links">
             <a href="#home">Accueil</a>
-            <a href="#features">Fonctionnalités</a>
+<!--            <a href="#features">Fonctioknnalités</a>-->
             <a href="#tournaments">Tournois</a>
-            <a href="#contact">Contact</a>
+<!--            <a href="#contact">Contact</a>-->
         </div>
         <div class="auth-buttons">
             <button class="btn btn-login">Connexion</button>
@@ -534,8 +534,8 @@
         <h1 class="hero-title">Organisez et participez à des <span>tournois e-sport</span> comme un pro</h1>
         <p class="hero-description">Une plateforme complète pour créer, gérer et participer à des tournois e-sport. Suivez les compétitions en temps réel, rejoignez une communauté passionnée et montez dans les classements.</p>
         <div class="hero-buttons">
-            <button class="btn btn-primary">Créer un tournoi</button>
-            <button class="btn btn-secondary">Découvrir les tournois</button>
+            <a href="/tournois/creation-tournois" class="btn btn-primary">Créer un tournoi</a>
+            <a href="/tournois" class="btn btn-secondary">Voir les tournois</a>
         </div>
     </div>
 </section>
@@ -594,8 +594,10 @@
 
         <div class="tournaments-grid">
             <!-- Utilisation de Thymeleaf pour afficher dynamiquement les tournois -->
-            <div class="tournament-card" th:each="tournoi : ${tournois}" th:if="${tournoi.status.name() == 'OPEN' || tournoi.status.name() == 'REGISTRATION'}">
-                <div class="tournament-image" th:style="${tournoi.game.imageUrl != null} ? 'background-image: url(' + ${tournoi.game.imageUrl} + ')' : 'background-image: url(\'/api/placeholder/400/200\')'">
+            <div th:each="tournoi : ${tournois}">
+                <div class="tournament-card"
+                     th:if="${tournoi.status.name() == 'OPEN' or tournoi.status.name() == 'REGISTRATION'}">
+                    <div class="tournament-image" th:style="${tournoi.game != null and tournoi.game.imageUrl != null} ? 'background-image: url(' + tournoi.game.imageUrl + ')' : 'background-image: url(\'/api/placeholder/400/200\')'">
                     <span class="tournament-game" th:text="${tournoi.game.name}">Nom du jeu</span>
                 </div>
                 <div class="tournament-content">
@@ -623,6 +625,7 @@
                     <div class="tournament-actions" style="margin-top: 15px;">
                         <a th:href="@{'/tournois/' + ${tournoi.id}}" class="btn btn-primary" style="width: 100%; text-align: center; text-decoration: none;">Voir détails</a>
                     </div>
+                </div>
                 </div>
             </div>
 

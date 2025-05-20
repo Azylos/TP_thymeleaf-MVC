@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+//@RequestMapping("/")
 public class AccueilController {
 
     private final TournoisService tournoisService;
@@ -21,14 +21,13 @@ public class AccueilController {
         this.tournoisService = tournoisService;
     }
 
-    @RequestMapping("/accueil")
+    @RequestMapping("/")
     public String accueil(Model model) {
-        List<Tournois> tournoisActifs = tournoisService.findByStatusIn(
-                List.of(TournamentStatus.OPEN, TournamentStatus.REGISTRATION)
-        );
-
+//        List<Tournois> tournoisActifs = tournoisService.findByStatusIn(
+//                List.of(TournamentStatus.OPEN, TournamentStatus.REGISTRATION)
+//        );
+        List<Tournois> tournoisActifs = tournoisService.findByStatus(TournamentStatus.OPEN);
         model.addAttribute("tournois", tournoisActifs);
-
         return "index";
     }
 }

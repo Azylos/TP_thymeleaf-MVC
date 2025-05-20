@@ -31,6 +31,8 @@ public abstract class Tournois {
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
     private List<Match> matches;
 
+    private String type;
+
     public Tournois() {
     }
 
@@ -112,6 +114,14 @@ public abstract class Tournois {
 
     public void setMatches(List<Match> matches) {
         this.matches = matches;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 
