@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Détail du jeu</title></head>
+<body>
+<h1 th:text="${jeu.name}">Nom du jeu</h1>
+<p th:text="${jeu.description}">Description</p>
+<p>Format : <span th:text="${jeu.format}"></span></p>
+<p>Durée moyenne : <span th:text="${jeu.averageMatchDuration}">XX</span> minutes</p>
+<a href="/jeux">Retour à la liste</a>
+</body>
+</html>

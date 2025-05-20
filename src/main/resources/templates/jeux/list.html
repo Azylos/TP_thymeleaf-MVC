@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Liste des jeux</title></head>
+<body>
+<h1>Liste des jeux</h1>
+<a href="/jeux/create">Créer un nouveau jeu</a>
+<ul>
+    <li th:each="jeu : ${jeuxList}">
+        <a th:href="@{/jeux/{id}(id=${jeu.id})}" th:text="${jeu.name}">Nom du jeu</a>
+        |
+        <a th:href="@{/jeux/{id}/edit(id=${jeu.id})}">Modifier</a>
+        |
+        <form th:action="@{/jeux/{id}/delete(id=${jeu.id})}" method="post" style="display:inline">
+            <button type="submit">Supprimer</button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

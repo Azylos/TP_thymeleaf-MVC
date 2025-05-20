@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Modifier le jeu</title></head>
+<body>
+<h1>Modifier le jeu</h1>
+<form th:action="@{/jeux/{id}/edit(id=${jeu.id})}" th:object="${jeu}" method="post">
+    <label>Nom: <input type="text" th:field="*{name}"/></label><br>
+    <label>Description: <textarea th:field="*{description}"></textarea></label><br>
+    <label>Format: <input type="text" th:field="*{format}"/></label><br>
+    <label>Durée moyenne: <input type="number" th:field="*{averageMatchDuration}"/></label><br>
+    <label>Modes disponibles:
+        <select th:field="*{availableModes}" multiple>
+            <option th:each="mode : ${modes}" th:value="${mode.id}" th:text="${mode.name}"></option>
+        </select>
+    </label><br>
+    <button type="submit">Enregistrer</button>
+</form>
+<a href="/jeux">Annuler</a>
+</body>
+</html>
