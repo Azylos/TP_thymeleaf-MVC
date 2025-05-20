@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Créer un mode</title></head>
+<body>
+<h1>Créer un mode de jeu</h1>
+<form th:action="@{/modes/create}" th:object="${mode}" method="post">
+  <label>Nom: <input type="text" th:field="*{name}" /></label><br>
+  <label>Description: <textarea th:field="*{description}"></textarea></label><br>
+  <label>Min joueurs: <input type="number" th:field="*{minPlayers}" /></label><br>
+  <label>Max joueurs: <input type="number" th:field="*{maxPlayers}" /></label><br>
+  <label>Score pour gagner: <input type="number" th:field="*{scoreToWin}" /></label><br>
+  <button type="submit">Créer</button>
+</form>
+<a href="/modes">Annuler</a>
+</body>
+</html>

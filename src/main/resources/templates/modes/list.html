@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Liste des modes de jeu</title></head>
+<body>
+<h1>Modes de jeu</h1>
+<a href="/modes/create">Ajouter un mode</a>
+<ul>
+    <li th:each="mode : ${modes}">
+        <a th:href="@{/modes/{id}(id=${mode.id})}" th:text="${mode.name}">Nom</a>
+        |
+        <a th:href="@{/modes/{id}/edit(id=${mode.id})}">Modifier</a>
+        |
+        <form th:action="@{/modes/{id}/delete(id=${mode.id})}" method="post" style="display:inline">
+            <button type="submit">Supprimer</button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

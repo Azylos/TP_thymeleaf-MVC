@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Détail du mode</title></head>
+<body>
+<h1 th:text="${mode.name}">Nom</h1>
+<p th:text="${mode.description}">Description</p>
+<p>Joueurs : <span th:text="${mode.minPlayers}"></span> à <span th:text="${mode.maxPlayers}"></span></p>
+<p>Score pour gagner : <span th:text="${mode.scoreToWin}"></span></p>
+<a href="/modes">Retour à la liste</a>
+</body>
+</html>
